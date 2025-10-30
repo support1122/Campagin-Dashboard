@@ -131,18 +131,13 @@ REST_FRAMEWORK = {
 }
 
 
-# CORS - Allow all origins for now to fix the connection issue
-CORS_ALLOW_ALL_ORIGINS = True
+"""CORS configuration sourced from environment for deployment safety."""
+# Allow-all toggle (defaults to False for production safety)
+CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=False, cast=bool)
 CORS_ALLOW_CREDENTIALS = True
 
-# Specific origins (fallback if needed)
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://localhost:5173', 
-    'https://campagin-dashboard-frontend.onrender.com',
-    'https://campagin-dashboard-backend.onrender.com',
-    'https://campagin-dashboard.onrender.com'
-]
+# Explicit allowed origins via env (comma-separated). Empty list if not set.
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='', cast=Csv())
 
 CORS_ALLOWED_HEADERS = [
     'accept',
