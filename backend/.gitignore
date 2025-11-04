@@ -31,5 +31,5 @@ staticfiles/
 media/
 celerybeat-schedule
 
-
+Dockerfile
 

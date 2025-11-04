@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Sidebar from './components/Sidebar'
 import EmailMarketing from './components/EmailMarketing'
+import WhatsAppMarketing from './components/WhatsAppMarketing'
 import Analytics from './components/Analytics'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -16,6 +17,7 @@ function App() {
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {activeSection === 'emails' && <EmailMarketing />}
+        {activeSection === 'whatsapp' && <WhatsAppMarketing />}
         {activeSection === 'analytics' && <Analytics />}
         {activeSection === 'dashboard' && (
           <div className="p-8">

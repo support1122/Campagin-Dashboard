@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     
     # Local apps
     'emails',
+    'whatsapp',
 ]
 
 MIDDLEWARE = [
@@ -170,6 +171,11 @@ SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
 
 # Kickbox (email verification)
 KICKBOX_API_KEY = config('KICKBOX_API_KEY', default='')
+
+# WATI (WhatsApp Business API)
+WATI_API_BASE_URL = config('WATI_API_BASE_URL', default='')
+WATI_API_TOKEN = config('WATI_API_TOKEN', default='')
+WATI_CHANNEL_NUMBER = config('WATI_CHANNEL_NUMBER', default='919335141341')
 
 
 # Celery Configuration
