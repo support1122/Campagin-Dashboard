@@ -1,28 +1,30 @@
-# Email Dashboard - Marketing Automation Platform
+# Campaign Dashboard - Multi-Channel Marketing Automation Platform
 
-A complete dashboard system for email marketing automation using Django, React, and SendGrid. Send template emails, track campaigns, and manage your marketing operations from a beautiful, modern interface.
+A complete dashboard system for email and WhatsApp marketing automation using Django, React, SendGrid, and WATI. Send template emails, WhatsApp messages, track campaigns, and manage your marketing operations from a beautiful, modern interface.
 
 ![Dashboard Preview](https://img.shields.io/badge/Status-Production%20Ready-green)
 ![Django](https://img.shields.io/badge/Django-4.2-blue)
 ![React](https://img.shields.io/badge/React-18.2-blue)
 ![SendGrid](https://img.shields.io/badge/SendGrid-Integrated-orange)
+![WATI](https://img.shields.io/badge/WATI-Integrated-green)
 
 ## 🚀 Features
 
 ### Current Features
 - ✅ **Email Marketing Dashboard** - Send template emails via SendGrid
+- ✅ **WhatsApp Marketing** - Send WhatsApp messages via WATI with approved templates
+- ✅ **Campaign Scheduling** - Schedule WhatsApp messages for future delivery with Redis/Celery
 - ✅ **Campaign Logging** - Track all sent campaigns with detailed statistics
 - ✅ **Modern UI** - Beautiful, responsive interface built with React & Tailwind CSS
 - ✅ **Real-time Status** - See success/failure status for each campaign
 - ✅ **Bulk Sending** - Send to multiple recipients simultaneously
 - ✅ **Template Management** - Use SendGrid dynamic templates
+- ✅ **Analytics Dashboard** - Detailed campaign performance metrics
 
 ### Coming Soon
-- 🔜 **Campaign Scheduling** - Schedule emails for future delivery with Celery
-- 🔜 **WhatsApp Integration** - Send WhatsApp messages via Twilio
 - 🔜 **SMS Marketing** - Multi-channel communication
-- 🔜 **Analytics Dashboard** - Detailed campaign performance metrics
 - 🔜 **Contact Management** - Organize and segment your contacts
+- 🔜 **Campaign Scheduling for Emails** - Schedule emails for future delivery
 
 ## 📋 Prerequisites
 
@@ -30,8 +32,9 @@ Before you begin, ensure you have the following installed:
 
 - **Python 3.8+** - [Download Python](https://www.python.org/downloads/)
 - **Node.js 16+** and npm - [Download Node.js](https://nodejs.org/)
-- **Redis** (for Celery, optional for now) - [Install Redis](https://redis.io/download)
+- **Redis** (for Celery and scheduled tasks) - [Install Redis](https://redis.io/download)
 - **SendGrid Account** - [Sign up for SendGrid](https://signup.sendgrid.com/)
+- **WATI Account** - [Sign up for WATI](https://wati.io) (for WhatsApp messaging)
 
 ## 🛠️ Installation & Setup
 
@@ -207,6 +210,16 @@ Scroll down to see all your campaign history with:
 | `GET` | `/api/emails/campaigns/` | List all campaigns |
 | `GET` | `/api/emails/campaigns/{id}/` | Get specific campaign |
 
+### WhatsApp Campaign APIs
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/whatsapp/campaigns/send_message/` | Send or schedule WhatsApp message |
+| `GET` | `/api/whatsapp/campaigns/templates/` | Get approved WATI templates |
+| `GET` | `/api/whatsapp/campaigns/logs/` | Get all campaign logs |
+| `GET` | `/api/whatsapp/campaigns/` | List all campaigns |
+| `GET` | `/api/whatsapp/campaigns/{id}/` | Get specific campaign |
+
 ### Example: Send Email Campaign
 
 ```bash
@@ -218,6 +231,25 @@ curl -X POST http://localhost:8000/api/emails/campaigns/send_email/ \
     "template_id": "d-1234567890abcdef",
     "recipients": "user1@example.com, user2@example.com"
   }'
+```
+
+### Example: Send WhatsApp Campaign
+
+```bash
+curl -X POST http://localhost:8000/api/whatsapp/campaigns/send_message/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "template_name": "Welcome Message",
+    "template_id": "template_123",
+    "mobile_number": "+919876543210",
+    "scheduled_time": "2025-01-20T10:30:00Z"
+  }'
+```
+
+### Example: Get WATI Templates
+
+```bash
+curl -X GET http://localhost:8000/api/whatsapp/campaigns/templates/
 ```
 
 ---
@@ -250,6 +282,40 @@ Sign up at [SendGrid](https://signup.sendgrid.com/)
 4. Click on the template and add a version
 5. Use the drag-and-drop editor or HTML editor
 6. Save and note the **Template ID** (e.g., `d-1234567890abcdef`)
+
+---
+
+## 💬 WhatsApp (WATI) Configuration
+
+### 1. Create WATI Account
+
+Sign up at [WATI](https://wati.io)
+
+### 2. Get API Credentials
+
+1. Go to **API Docs** section in your WATI dashboard
+2. Copy your:
+   - **API Endpoint URL** (e.g., `https://your-instance.wati.io`)
+   - **Access Token** (Bearer token)
+
+### 3. Configure in Application
+
+Add to your `.env` file:
+
+```bash
+# WhatsApp Services (WATI)
+WATI_API_BASE_URL=https://your-instance.wati.io
+WATI_API_TOKEN=your-access-token-here
+```
+
+### 4. Create Approved WhatsApp Templates
+
+1. Go to **Templates** section in WATI
+2. Create and submit templates for approval
+3. Wait for WhatsApp approval
+4. Approved templates will appear in the dropdown automatically
+
+For detailed setup instructions, see [WHATSAPP_SETUP.md](WHATSAPP_SETUP.md)
 
 ---
 

@@ -1,9 +1,10 @@
-import { MdEmail, MdDashboard, MdAnalytics } from 'react-icons/md'
+import { MdEmail, MdDashboard, MdAnalytics, MdMessage } from 'react-icons/md'
 
 const Sidebar = ({ activeSection, setActiveSection }) => {
   const menuItems = [
     { id: 'dashboard', name: 'Dashboard', icon: MdDashboard },
     { id: 'emails', name: 'Emails', icon: MdEmail },
+    { id: 'whatsapp', name: 'WhatsApp', icon: MdMessage },
     { id: 'analytics', name: 'Analytics', icon: MdAnalytics },
   ]
 

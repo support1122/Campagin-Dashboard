@@ -16,6 +16,7 @@ def api_status(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/emails/', include('emails.urls')),
+    path('api/whatsapp/', include('whatsapp.urls')),
     path('api/', api_status, name='api_status'),
     path('healthz/', health_check, name='health_check'),
 ]

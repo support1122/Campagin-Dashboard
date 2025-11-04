@@ -54,5 +54,7 @@ celerybeat.pid
 # Build
 build/
 
-
-
+docker-compose.yml
+cleanup.sh
+run.sh
+.dockerignore
