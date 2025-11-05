@@ -189,7 +189,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 if REDIS_URL.startswith('rediss://'):
-   CELERY_BROKER_USE_SSL = {
+    CELERY_BROKER_USE_SSL = {
         'ssl_cert_reqs': ssl.CERT_NONE
     }
     CELERY_REDIS_BACKEND_USE_SSL = {
