@@ -3,6 +3,7 @@ Django settings for Email Dashboard project.
 """
 
 from pathlib import Path
+import ssl
 from decouple import config, Csv
 import dj_database_url
 
@@ -179,12 +180,21 @@ WATI_CHANNEL_NUMBER = config('WATI_CHANNEL_NUMBER', default='919335141341')
 
 
 # Celery Configuration
-CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = config('REDIS_URL', default='redis://localhost:6379/0')
+REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/0')
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+
+if REDIS_URL.startswith('rediss://'):
+   CELERY_BROKER_USE_SSL = {
+        'ssl_cert_reqs': ssl.CERT_NONE
+    }
+    CELERY_REDIS_BACKEND_USE_SSL = {
+        'ssl_cert_reqs': ssl.CERT_NONE
+    }
 
 # Production settings for Render
 if not DEBUG:
