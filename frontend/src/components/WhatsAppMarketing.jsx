@@ -118,16 +118,16 @@ const WhatsAppMarketing = () => {
         template_name: selectedTemplate.name,
         template_id: selectedTemplate.id
       }))
-      // Reset parameters when template changes
-      if (selectedTemplate.name !== 'payment112') {
+      // Reset parameters when template changes (except templates that use parameters)
+      if (selectedTemplate.name !== 'payment112' && selectedTemplate.name !== 'finalkk') {
         setParam1('https://flashfirejobs.com/pricing')
         setParam2('https://flashfirejobs.com/pricing')
       }
     }
   }
 
-  // Check if payment112 template is selected
-  const isPayment112Template = formData.template_name === 'payment112'
+  // Check if template requires parameters (payment112 or finalkk)
+  const isParameterizedTemplate = formData.template_name === 'payment112' || formData.template_name === 'finalkk'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -155,11 +155,11 @@ const WhatsAppMarketing = () => {
         return
       }
 
-      // Check if this is payment112 template - schedule 3 campaigns
-      const isPayment112 = formData.template_name === 'payment112'
+      // Check if this is a parameterized template (payment112 or finalkk) - schedule 3 campaigns
+      const isParameterized = formData.template_name === 'payment112' || formData.template_name === 'finalkk'
       
-      // Prepare parameters for payment112 template
-      const parameters = isPayment112 ? [
+      // Prepare parameters for parameterized templates
+      const parameters = isParameterized ? [
         { name: '2', value: param1 },
         { name: '3', value: param2 }
       ] : []
@@ -170,7 +170,7 @@ const WhatsAppMarketing = () => {
 
       for (const contactPhone of recipients) {
         try {
-          if (isPayment112) {
+          if (isParameterized) {
             // Schedule 3 campaigns: today, 7 days, 10 days
             const baseDate = new Date(scheduledTimeUTC)
             const schedules = [
@@ -307,8 +307,8 @@ const WhatsAppMarketing = () => {
             />
           </div>
 
-          {/* Parameter fields for payment112 template */}
-          {isPayment112Template && (
+          {/* Parameter fields for payment112 and finalkk templates */}
+          {isParameterizedTemplate && (
             <>
               <div>
                 <label htmlFor="param1" className="block text-sm font-medium text-gray-700 mb-2">
@@ -320,7 +320,7 @@ const WhatsAppMarketing = () => {
                   name="param1"
                   value={param1}
                   onChange={(e) => setParam1(e.target.value)}
-                  placeholder="https://flashfirejobs.com/pricing"
+                  placeholder="Enter value for {{2}} (e.g., plan name or URL)"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 />
                 <p className="mt-2 text-sm text-gray-500">This value will replace {'{{'}2{'}}'} in the template</p>
@@ -336,7 +336,7 @@ const WhatsAppMarketing = () => {
                   name="param2"
                   value={param2}
                   onChange={(e) => setParam2(e.target.value)}
-                  placeholder="https://flashfirejobs.com/pricing"
+                  placeholder="Enter value for {{3}} (e.g., date or URL)"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 />
                 <p className="mt-2 text-sm text-gray-500">This value will replace {'{{'}3{'}}'} in the template</p>
@@ -350,6 +350,9 @@ const WhatsAppMarketing = () => {
                     <li>One for 7 days later</li>
                     <li>One for 10 days later</li>
                   </ul>
+                </p>
+                <p className="text-sm text-blue-800 mt-2">
+                  Template message: &quot;Hi This is a payment reminder for your Flashfire {'{{'}2{'}}'} plan dated {'{{'}3{'}}'}. Our records show that the payment is still pending in the system. If the payment has already been made, please disregard this message.&quot;
                 </p>
               </div>
             </>
