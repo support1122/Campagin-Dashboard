@@ -188,7 +188,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
-if REDIS_URL.startswith('rediss://'):
+if REDIS_URL and REDIS_URL.startswith('rediss://'):
     CELERY_BROKER_USE_SSL = {
         'ssl_cert_reqs': ssl.CERT_NONE
     }
@@ -213,6 +213,46 @@ APPEND_SLASH = True
 if not DEBUG:
     # This will be handled by management command during deployment
     pass
+
+
+# Logging configuration (prints to stdout for Docker/Render visibility)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '[{levelname}] {asctime} {name}: {message}',
+            'style': '{'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO'
+    },
+    'loggers': {
+        'whatsapp': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'requests': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': True
+        }
+    }
+}
 
 
 
