@@ -80,7 +80,44 @@ CORS_ALLOWED_ORIGINS=https://your-frontend-name.onrender.com
 
 **Template ID Note:** The system uses template IDs from the UI form, not environment variables. You can use different SendGrid template IDs for each campaign.
 
-### **2.5 Deploy Backend**
+### **2.5 Configure Celery on Render**
+
+Automatic WhatsApp scheduling relies on Celery workers. Docker starts them for you, but on Render you must create two additional services.
+
+#### **Celery Worker (Background Worker)**
+```
+Name: email-dashboard-celery-worker
+Environment: Python 3
+Region: (match backend)
+Branch: main
+Root Directory: backend
+
+Build Command:
+cd backend && pip install -r requirements.txt
+
+Start Command:
+cd backend && celery -A config worker --loglevel=info
+```
+
+#### **Celery Beat (Scheduler)**
+Runs the hourly fallback that re-sends missed WhatsApp messages.
+```
+Name: email-dashboard-celery-beat
+Environment: Python 3
+Region: (match backend)
+Branch: main
+Root Directory: backend
+
+Build Command:
+cd backend && pip install -r requirements.txt
+
+Start Command:
+cd backend && celery -A config beat --loglevel=info
+```
+
+> 💡 Use Render's “Copy environment variables” feature so both services get the same env vars as the backend (SECRET_KEY, DATABASE_URL, REDIS_URL, etc.).
+
+### **2.6 Deploy Backend**
 1. **Click "Create Web Service"**
 2. **Wait for deployment (5-10 minutes)**
 3. **Copy the backend URL (e.g., `https://email-dashboard-backend.onrender.com`)**
